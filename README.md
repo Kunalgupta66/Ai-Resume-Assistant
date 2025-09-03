@@ -7,7 +7,7 @@ Features: AI resume generation, editable form, resume preview, exports, intervie
 
 1. Clone
 ```bash
-git clone https://github.com/<YOUR_USERNAME>/<REPO>.git
+git clone https://github.com/Kunalgupta66/Ai-Resume-Assistant.git
 cd <REPO>
 
 2. Create venv & install
