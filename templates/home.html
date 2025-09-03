@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="container py-5 text-center">
+    <h1 class="display-5 fw-bold text-light mb-5">
+        Welcome to AI-Powered Resume & Job Assistant
+    </h1>
+
+    <div class="row justify-content-center g-4">
+        <!-- AI Describe Button -->
+        <div class="col-md-4">
+            <a href="{% url 'ai_description' %}" 
+               class="btn btn-lg btn-gradient w-100 py-5 text-white rounded-4 shadow-lg">
+                <i class="fas fa-brain fa-3x mb-3 d-block"></i>
+                <h3 class="fw-bold">AI Describe</h3>
+                <p class="mb-0">Enter a description and let AI generate a resume for you</p>
+            </a>
+        </div>
+
+        <!-- Resume Form Button -->
+        <div class="col-md-4">
+            <a href="{% url 'resume_form' %}" 
+               class="btn btn-lg btn-gradient w-100 py-5 text-white rounded-4 shadow-lg"
+               style="background: linear-gradient(135deg,#36d1dc,#5b86e5);">
+                <i class="fas fa-file-alt fa-3x mb-3 d-block"></i>
+                <h3 class="fw-bold">Resume Form</h3>
+                <p class="mb-0">Manually add your details and customize your resume</p>
+            </a>
+        </div>
+
+        <!-- Interview Q&A Button -->
+        <div class="col-md-4">
+            <a href="{% url 'interview_qna' %}" 
+               class="btn btn-lg btn-gradient w-100 py-5 text-white rounded-4 shadow-lg"
+               style="background: linear-gradient(135deg,#ff6a00,#ee0979);">
+                <i class="fas fa-comments fa-3x mb-3 d-block"></i>
+                <h3 class="fw-bold">Interview Q&A</h3>
+                <p class="mb-0">Practice AI-generated interview questions & answers</p>
+            </a>
+        </div>
+    </div>
+</main>
+
+<style>
+    .btn-gradient {
+        background: linear-gradient(135deg,#667eea,#764ba2);
+        border: none;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-gradient:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.25);
+        text-decoration: none;
+    }
+
+    h1 {
+        letter-spacing: 1px;
+    }
+
+</style>
+{% endblock %}

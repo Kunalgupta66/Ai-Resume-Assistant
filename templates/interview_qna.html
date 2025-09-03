@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="py-5" style="background:#0b1020; min-height:100vh;">
+    <div class="container">
+        <div class="card shadow-lg border-0 rounded-4"
+            style="background:#121933; color:#dbe4ff;">
+            <div class="card-body p-5">
+
+                <h2 class="fw-bold text-info mb-4">🎤 Interview Practice
+                    Q&A</h2>
+
+                <!-- Job Role & Company Form -->
+                <form method="post" class="mb-4">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <input type="text" name="job_role"
+                                class="form-control bg-dark text-light border-0 rounded-3"
+                                placeholder="Enter Job Role (e.g. Data Analyst)"
+                                required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" name="company"
+                                class="form-control bg-dark text-light border-0 rounded-3"
+                                placeholder="Enter Company (optional)">
+                        </div>
+                    </div>
+                    <div class="d-grid mt-3">
+                        <button type="submit" class="btn btn-info fw-semibold">✨
+                            Generate Q&A</button>
+                    </div>
+                </form>
+
+                <!-- AI Response -->
+                {% if qa_text %}
+                <pre
+                    style="white-space: pre-wrap; background:#0f1530; padding:20px; border-radius:12px; color:#dbe4ff; border:1px solid #2e3b7a;">
+{{ qa_text }}
+          </pre>
+                {% endif %}
+
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <a href="{% url 'home' %}" class="btn btn-outline-light">🏠
+                        Back Home</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+/* Make placeholder text visible on dark inputs */
+.form-control::placeholder {
+  color: #aaa !important;   /* light gray */
+  opacity: 1;               /* ensure it's fully visible */
+}
+</style>
+
+
+{% endblock %}

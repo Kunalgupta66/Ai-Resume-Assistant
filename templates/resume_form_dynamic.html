@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section class="py-5" style="background:#0b1020;min-height:100vh;">
+  <div class="container">
+    <div class="mx-auto" style="max-width:1000px;">
+      <div class="card border-0 rounded-4 shadow-lg"
+        style="background:#121933;color:#dbe4ff;">
+        <div class="card-body p-5">
+          <h2 class="h3 fw-bold mb-4">📋 Resume Form</h2>
+
+          <!-- Basic fields -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-6"><label class="form-label">Full
+                Name</label><input id="name" class="form-control"></div>
+            <div class="col-md-6"><label class="form-label">Email</label><input
+                id="email" class="form-control"></div>
+            <div class="col-md-6"><label class="form-label">Phone</label><input
+                id="phone" class="form-control"></div>
+            <div class="col-md-6"><label
+                class="form-label">Location</label><input id="location"
+                class="form-control"></div>
+            <div class="col-12"><label
+                class="form-label">Summary</label><textarea id="summary"
+                rows="3" class="form-control"></textarea></div>
+            <div class="col-md-4"><label class="form-label">GitHub</label><input
+                id="github" class="form-control"></div>
+            <div class="col-md-4"><label
+                class="form-label">LinkedIn</label><input id="linkedin"
+                class="form-control"></div>
+            <div class="col-md-4"><label
+                class="form-label">Portfolio</label><input id="portfolio"
+                class="form-control"></div>
+          </div>
+
+          <!-- Repeated blocks -->
+          <div id="skills" class="mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-2">Skills</h5>
+              <button class="btn btn-sm btn-outline-info" onclick="addSkill()">+
+                Add Skill</button>
+            </div>
+          </div>
+
+          <div id="experience" class="mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-2">Experience / Internship</h5>
+              <button class="btn btn-sm btn-outline-info" onclick="addExp()">+
+                Add Experience</button>
+            </div>
+          </div>
+
+          <div id="projects" class="mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-2">Projects</h5>
+              <button class="btn btn-sm btn-outline-info"
+                onclick="addProject()">+ Add Project</button>
+            </div>
+          </div>
+
+          <div id="education" class="mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-2">Education</h5>
+              <button class="btn btn-sm btn-outline-info" onclick="addEdu()">+
+                Add Education</button>
+            </div>
+          </div>
+
+          <div id="certifications" class="mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-2">Certifications</h5>
+              <button class="btn btn-sm btn-outline-info" onclick="addCert()">+
+                Add Certification</button>
+            </div>
+          </div>
+
+          <div id="achievements" class="mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-2">Achievements</h5>
+              <button class="btn btn-sm btn-outline-info"
+                onclick="addAchievement()">+ Add Achievement</button>
+            </div>
+          </div>
+
+          <div id="languages" class="mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-2">Languages</h5>
+              <button class="btn btn-sm btn-outline-info"
+                onclick="addLanguage()">+ Add Language</button>
+            </div>
+          </div>
+
+          <div id="interests" class="mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-2">Interests</h5>
+              <button class="btn btn-sm btn-outline-info"
+                onclick="addInterest()">+ Add Interest</button>
+            </div>
+          </div>
+
+          <form method="post" id="finalForm" action="{% url 'resume_preview' %}"
+            onsubmit="event.preventDefault();submitJSON();">
+            {% csrf_token %}
+            <input type="hidden" name="resume_json" id="resume_json">
+            <button class="btn btn-info px-4">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+
+const data = JSON.parse('{{ data_json|escapejs }}');
+
+function el(html){const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstChild;}
+function removeSelf(btn){btn.closest('.item').remove();}
+
+function addSkill(s={title:'',level:''}) {
+  const row = el(`<div class="item bg-dark p-3 rounded-3 mb-2">
+    <div class="row g-2">
+      <div class="col-md-8"><input class="form-control" placeholder="Skill (e.g., Python)" value="${s.title||''}"></div>
+      <div class="col-md-3"><input class="form-control" placeholder="Level (e.g., Advanced)" value="${s.level||''}"></div>
+      <div class="col-md-1 d-grid"><button class="btn btn-outline-danger" onclick="removeSelf(this)">🗑</button></div>
+    </div></div>`);
+  document.getElementById('skills').appendChild(row);
+}
+function addExp(e={title:'',company:'',start:'',end:'',description:''}) {
+  const row = el(`<div class="item bg-dark p-3 rounded-3 mb-2">
+    <div class="row g-2">
+      <div class="col-md-4"><input class="form-control" placeholder="Title" value="${e.title||''}"></div>
+      <div class="col-md-4"><input class="form-control" placeholder="Company" value="${e.company||''}"></div>
+      <div class="col-md-2"><input class="form-control" placeholder="Start" value="${e.start||''}"></div>
+      <div class="col-md-2"><input class="form-control" placeholder="End" value="${e.end||''}"></div>
+      <div class="col-12"><textarea class="form-control" rows="2" placeholder="Description">${e.description||''}</textarea></div>
+      <div class="col-12 d-flex justify-content-end"><button class="btn btn-outline-danger" onclick="removeSelf(this)">Remove</button></div>
+    </div></div>`);
+  document.getElementById('experience').appendChild(row);
+}
+function addProject(p={name:'',tech:'',description:''}) {
+  const row = el(`<div class="item bg-dark p-3 rounded-3 mb-2">
+    <div class="row g-2">
+      <div class="col-md-4"><input class="form-control" placeholder="Project name" value="${p.name||''}"></div>
+      <div class="col-md-4"><input class="form-control" placeholder="Tech (e.g., Django, React)" value="${p.tech||''}"></div>
+      <div class="col-md-3"><textarea class="form-control" rows="2" placeholder="Description">${p.description||''}</textarea></div>
+      <div class="col-md-1 d-grid"><button class="btn btn-outline-danger" onclick="removeSelf(this)">🗑</button></div>
+    </div></div>`);
+  document.getElementById('projects').appendChild(row);
+}
+function addEdu(ed={degree:'',institute:'',start:'',end:'',score:''}) {
+  const row = el(`<div class="item bg-dark p-3 rounded-3 mb-2">
+    <div class="row g-2">
+      <div class="col-md-4"><input class="form-control" placeholder="Degree" value="${ed.degree||''}"></div>
+      <div class="col-md-4"><input class="form-control" placeholder="Institute" value="${ed.institute||''}"></div>
+      <div class="col-md-2"><input class="form-control" placeholder="Start" value="${ed.start||''}"></div>
+      <div class="col-md-2"><input class="form-control" placeholder="End" value="${ed.end||''}"></div>
+      <div class="col-md-3 mt-2"><input class="form-control" placeholder="Score/CGPA" value="${ed.score||''}"></div>
+      <div class="col-12 d-flex justify-content-end"><button class="btn btn-outline-danger" onclick="removeSelf(this)">Remove</button></div>
+    </div></div>`);
+  document.getElementById('education').appendChild(row);
+}
+function addCert(c={name:'',issuer:'',year:''}) {
+  const row = el(`<div class="item bg-dark p-3 rounded-3 mb-2">
+    <div class="row g-2">
+      <div class="col-md-6"><input class="form-control" placeholder="Certificate" value="${c.name||''}"></div>
+      <div class="col-md-4"><input class="form-control" placeholder="Issuer" value="${c.issuer||''}"></div>
+      <div class="col-md-2"><input class="form-control" placeholder="Year" value="${c.year||''}"></div>
+      <div class="col-12 d-flex justify-content-end"><button class="btn btn-outline-danger" onclick="removeSelf(this)">Remove</button></div>
+    </div></div>`);
+  document.getElementById('certifications').appendChild(row);
+}
+function addAchievement(a=""){ 
+  const row = el(`<div class="item bg-dark p-3 rounded-3 mb-2">
+    <div class="row g-2">
+      <div class="col-11"><input class="form-control" placeholder="Achievement" value="${a}"></div>
+      <div class="col-1 d-grid"><button class="btn btn-outline-danger" onclick="removeSelf(this)">🗑</button></div>
+    </div></div>`);
+  document.getElementById('achievements').appendChild(row);
+}
+function addLanguage(l=""){ 
+  const row = el(`<div class="item bg-dark p-3 rounded-3 mb-2">
+    <div class="row g-2">
+      <div class="col-11"><input class="form-control" placeholder="Language" value="${l}"></div>
+      <div class="col-1 d-grid"><button class="btn btn-outline-danger" onclick="removeSelf(this)">🗑</button></div>
+    </div></div>`);
+  document.getElementById('languages').appendChild(row);
+}
+function addInterest(i=""){ 
+  const row = el(`<div class="item bg-dark p-3 rounded-3 mb-2">
+    <div class="row g-2">
+      <div class="col-11"><input class="form-control" placeholder="Interest" value="${i}"></div>
+      <div class="col-1 d-grid"><button class="btn btn-outline-danger" onclick="removeSelf(this)">🗑</button></div>
+    </div></div>`);
+  document.getElementById('interests').appendChild(row);
+}
+
+function hydrate(){
+  // basics
+  ['name','email','phone','location','summary'].forEach(k=>{
+    document.getElementById(k).value = data[k] || '';
+  });
+  document.getElementById('github').value = (data.links||{}).github || '';
+  document.getElementById('linkedin').value = (data.links||{}).linkedin || '';
+  document.getElementById('portfolio').value = (data.links||{}).portfolio || '';
+
+  (data.skills||[]).forEach(addSkill);
+  (data.experience||[]).forEach(addExp);
+  (data.projects||[]).forEach(addProject);
+  (data.education||[]).forEach(addEdu);
+  (data.certifications||[]).forEach(addCert);
+  (data.achievements||[]).forEach(addAchievement);
+  (data.languages||[]).forEach(addLanguage);
+  (data.interests||[]).forEach(addInterest);
+}
+function collect(){
+  const getItems = (id, mapper) => Array.from(document.querySelectorAll(`#${id} .item`)).map(mapper);
+  return {
+    name: document.getElementById('name').value,
+    email: document.getElementById('email').value,
+    phone: document.getElementById('phone').value,
+    location: document.getElementById('location').value,
+    summary: document.getElementById('summary').value,
+    links: {
+      github: document.getElementById('github').value,
+      linkedin: document.getElementById('linkedin').value,
+      portfolio: document.getElementById('portfolio').value,
+    },
+    skills: getItems('skills', el=>({ 
+      title: el.querySelectorAll('input')[0].value, 
+      level: el.querySelectorAll('input')[1].value 
+    })),
+    experience: getItems('experience', el=>{
+      const I = el.querySelectorAll('input'), T = el.querySelector('textarea');
+      return { title:I[0].value, company:I[1].value, start:I[2].value, end:I[3].value, description:T.value };
+    }),
+    projects: getItems('projects', el=>{
+      const I = el.querySelectorAll('input'), T = el.querySelector('textarea');
+      return { name:I[0].value, tech:I[1].value, description:T.value };
+    }),
+    education: getItems('education', el=>{
+      const I = el.querySelectorAll('input');
+      return { degree:I[0].value, institute:I[1].value, start:I[2].value, end:I[3].value, score:I[4].value };
+    }),
+    certifications: getItems('certifications', el=>{
+      const I = el.querySelectorAll('input'); return { name:I[0].value, issuer:I[1].value, year:I[2].value };
+    }),
+    achievements: getItems('achievements', el=> el.querySelector('input').value ),
+    languages: getItems('languages', el=> el.querySelector('input').value ),
+    interests: getItems('interests', el=> el.querySelector('input').value ),
+  };
+}
+function submitJSON(){
+  const payload = collect();
+  document.getElementById('resume_json').value = JSON.stringify(payload);
+  // post to current form to store in session and redirect
+  const form = document.getElementById('finalForm');
+  form.method = 'POST';
+  form.action = "{% url 'resume_form' %}";
+  form.submit();
+}
+
+hydrate();
+</script>
+{% endblock %}
